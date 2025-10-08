@@ -15,18 +15,20 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
-    private String autor;
-    private String ISBN;
+
+    @ManyToOne
+    private Autor autor;
+    private String Isbn;
     private int añoPublicacion;
 
     @Setter
     private boolean disponible;
 
-    public Libro(String titulo, String autor,int añoPublicacion, String ISBN) {
+    public Libro(String titulo, Autor autor,int añoPublicacion, String Isbn) {
         this.titulo = titulo;
         this.autor = autor;
         this.añoPublicacion = añoPublicacion;
-        this.ISBN = ISBN;
+        this.Isbn = Isbn;
         this.disponible = true;
     }
 }
