@@ -5,11 +5,13 @@ import com.mibiblioteca.gestion_biblioteca_cli.exceptions.UsuarioNoEncontradoExc
 import com.mibiblioteca.gestion_biblioteca_cli.exceptions.UsuarioYaRegistradoException;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Usuario;
 import com.mibiblioteca.gestion_biblioteca_cli.repository.UsuarioRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UsuarioService {
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;

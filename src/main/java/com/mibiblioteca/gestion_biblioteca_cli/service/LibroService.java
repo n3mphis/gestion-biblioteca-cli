@@ -1,6 +1,5 @@
 package com.mibiblioteca.gestion_biblioteca_cli.service;
-
-import com.mibiblioteca.gestion_biblioteca_cli.exceptions.AutorNoEncontradoException;
+;
 import com.mibiblioteca.gestion_biblioteca_cli.exceptions.LibroNoEncontradoException;
 import com.mibiblioteca.gestion_biblioteca_cli.exceptions.LibroYaRegistradoException;
 import com.mibiblioteca.gestion_biblioteca_cli.exceptions.NoHayLibrosDeEseAutorException;
@@ -9,13 +8,10 @@ import com.mibiblioteca.gestion_biblioteca_cli.model.Libro;
 import com.mibiblioteca.gestion_biblioteca_cli.repository.LibroRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class LibroService {
-
-
     private final LibroRepository libroRepository;
 
     public LibroService(LibroRepository libroRepository) {
@@ -41,5 +37,9 @@ public class LibroService {
             throw new NoHayLibrosDeEseAutorException("No se encontraron libros del autor " + autor.getNombre() + " " + autor.getApellido());
         }
         return libros;
+    }
+
+    public Libro guardarLibro(Libro libro) {
+        return libroRepository.save(libro);
     }
 }

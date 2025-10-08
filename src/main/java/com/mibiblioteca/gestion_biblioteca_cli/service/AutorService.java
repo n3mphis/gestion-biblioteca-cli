@@ -4,10 +4,12 @@ import com.mibiblioteca.gestion_biblioteca_cli.exceptions.AutorNoEncontradoExcep
 import com.mibiblioteca.gestion_biblioteca_cli.exceptions.AutorYaRegistradoException;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Autor;
 import com.mibiblioteca.gestion_biblioteca_cli.repository.AutorRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AutorService {
 
-    private AutorRepository autorRepository;
+    private final AutorRepository autorRepository;
 
     public AutorService(AutorRepository autorRepository) {
         this.autorRepository = autorRepository;
