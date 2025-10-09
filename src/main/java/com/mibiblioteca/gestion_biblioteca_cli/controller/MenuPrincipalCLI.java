@@ -1,9 +1,6 @@
 package com.mibiblioteca.gestion_biblioteca_cli.controller;
 
-import com.mibiblioteca.gestion_biblioteca_cli.exceptions.AutorNoEncontradoException;
-import com.mibiblioteca.gestion_biblioteca_cli.exceptions.AutorYaRegistradoException;
-import com.mibiblioteca.gestion_biblioteca_cli.exceptions.LibroYaRegistradoException;
-import com.mibiblioteca.gestion_biblioteca_cli.exceptions.UsuarioYaRegistradoException;
+import com.mibiblioteca.gestion_biblioteca_cli.exceptions.*;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Autor;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Libro;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Usuario;
@@ -201,5 +198,46 @@ public class MenuPrincipalCLI {
         }
     }
 
+    private void buscarUsuarioPorDni() {
+        System.out.println("\n--- BUSCAR USUARIO POR DNI ---");
 
+        try {
+            System.out.println("Ingrese el DNI del usuario:");
+            System.out.print("-> ");
+            String dni = sc.nextLine().trim();
+
+            Usuario usuarioEncontrado = usuarioService.buscarPorDni(dni);
+
+            System.out.println("\n✅ Usuario encontrado: ");
+            System.out.println(usuarioEncontrado.getNombre() + " " + usuarioEncontrado.getApellido());
+        } catch (UsuarioNoEncontradoException e) {
+            System.out.println("❌" + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error! " + e.getMessage());
+        }
+    }
+
+    private void buscarLibroPorIsbn() {
+        System.out.println("\n--- BUSCAR LIBRO POR ISBN ---");
+
+        try {
+            System.out.println("Ingrese el ISBN del libro:");
+            System.out.print("-> ");
+            String isbn = sc.nextLine().trim();
+
+            Libro libroEncontrado = libroService.buscarPorIsbn(isbn);
+
+            System.out.println("\n✅ Libro Encontrado!");
+            System.out.println("    Título:    " + libroEncontrado.getTitulo());
+            System.out.println("    Autor:   " + libroEncontrado.getAutor());
+            System.out.println("    Año de publicación:    " +libroEncontrado.getAñoPublicacion());
+
+            String estado = libroEncontrado.isDisponible() ? "\uD83D\uDFE2 DISPONIBLE" : "\uD83D\uDD34 PRESTADO";
+            System.out.println("    Estado:    " + estado);
+        } catch (LibroNoEncontradoException e) {
+            System.out.println("❌" + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
 }

@@ -21,7 +21,6 @@ public class Libro {
     private String Isbn;
     private int añoPublicacion;
 
-    @Setter
     private boolean disponible;
 
     public Libro(String titulo, Autor autor,int añoPublicacion, String Isbn) {
@@ -30,5 +29,9 @@ public class Libro {
         this.añoPublicacion = añoPublicacion;
         this.Isbn = Isbn;
         this.disponible = true;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 }
