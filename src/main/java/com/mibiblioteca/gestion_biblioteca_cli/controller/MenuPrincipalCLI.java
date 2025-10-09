@@ -9,6 +9,7 @@ import com.mibiblioteca.gestion_biblioteca_cli.service.LibroService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.PrestamoService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.UsuarioService;
 
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -35,6 +36,7 @@ public class MenuPrincipalCLI {
     }
 
     private void mostrarMenu() {
+        while (!salir) {
             System.out.println("""
                 \uD83D\uDCD6 ¡Bienvenido al Gestor De Biblioteca!
                 Las opciones son:
@@ -69,10 +71,14 @@ public class MenuPrincipalCLI {
                 default:
                     System.out.println("No es una elección válida");
             }
+        }
     }
 
+    //-----------------------------------
+    // Maneja toda la sección de Registro y Gestión
     private void registroYGestion() {
-        System.out.println("""
+        while (!salir) {
+            System.out.println("""
                 1. Registrar Nuevo Usuario
                 2. Registrar Nuevo Autor
                 3. Registrar Nuevo Libro
@@ -80,32 +86,33 @@ public class MenuPrincipalCLI {
                 5. Buscar Libro por ISBN
                 6. Volver al menu principal
                 """);
-        System.out.println("Elija su opción: ");
-        System.out.print("-> ");
-        String seleccion = sc.nextLine();
+            System.out.println("Elija su opción: ");
+            System.out.print("-> ");
+            String seleccion = sc.nextLine();
 
-        switch (seleccion) {
-            case "1":
-                registrarUsuario();
-                break;
-            case "2":
-                registrarAutor();
-                break;
-            case "3":
-                registrarNuevoLibro();
-                break;
-            case "4":
-                buscarUsuarioPorDni();
-                break;
-            case "5":
-                buscarLibroPorIsbn();
-                break;
-            case "6":
-                mostrarMenu();
-                break;
-            default:
-                System.out.println("No es una opción válida");
+            switch (seleccion) {
+                case "1":
+                    registrarUsuario();
+                    break;
+                case "2":
+                    registrarAutor();
+                    break;
+                case "3":
+                    registrarNuevoLibro();
+                    break;
+                case "4":
+                    buscarUsuarioPorDni();
+                    break;
+                case "5":
+                    buscarLibroPorIsbn();
+                    break;
+                case "6":
+                    return;
+                default:
+                    System.out.println("No es una opción válida");
+            }
         }
+
     }
 
     private void registrarUsuario() {
@@ -229,7 +236,7 @@ public class MenuPrincipalCLI {
 
             System.out.println("\n✅ Libro Encontrado!");
             System.out.println("    Título:    " + libroEncontrado.getTitulo());
-            System.out.println("    Autor:   " + libroEncontrado.getAutor());
+            System.out.println("    Autor:   " + libroEncontrado.getAutor().getNombre() + " " + libroEncontrado.getAutor().getApellido());
             System.out.println("    Año de publicación:    " +libroEncontrado.getAñoPublicacion());
 
             String estado = libroEncontrado.isDisponible() ? "\uD83D\uDFE2 DISPONIBLE" : "\uD83D\uDD34 PRESTADO";
@@ -238,6 +245,70 @@ public class MenuPrincipalCLI {
             System.out.println("❌" + e.getMessage());
         } catch (Exception e) {
             System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+    //---------------------------------
+
+    //---------------------------------
+    // Maneja toda la sección de Préstamos
+    private void prestamos() {
+        while (!salir) {
+            System.out.println("""
+                    1. Realizar Préstamo
+                    2. Devolver Préstamo
+                    3. Obtener Prestamos Activos
+                    4. Obtener Prestamos entre fechas
+                    5. Volver al menu principal
+                    """);
+
+            System.out.println("Elija su opción:");
+            System.out.print("-> ");
+            String elección = sc.nextLine().trim();
+
+            switch (elección) {
+                case "1":
+                    realizarPrestamo();
+                    break;
+                case "2":
+                    devolverPrestamo();
+                    break;
+                case "3":
+                    obtenerPrestamosActivos();
+                    break;
+                case "4":
+                    obtenerPrestamosEntreFechas();
+                    break;
+                case "5":
+                    return;
+                default:
+                    System.out.println("Opción no válida. Elija otra opción!");
+                    break;
+            }
+        }
+    }
+
+    private void realizarPrestamo() {
+        System.out.println("\n--- REALIZAR PRESTAMO ---");
+        try {
+            System.out.println("Ingrese ISBN del libro");
+            System.out.print("-> ");
+            String isbn = sc.nextLine().trim();
+
+            System.out.println("Ingrese su DNI");
+            System.out.print("-> ");
+            String dni = sc.nextLine().trim();
+
+            LocalDate fechaEstimada = LocalDate.now().plusDays(7);
+
+            prestamoService.realizarPrestamo(isbn, dni, fechaEstimada);
+
+            System.out.println("✅ Préstamo hecho con éxito!");
+            System.out.println("    Libro (ISBN):    " + isbn + " prestado al usuario con DNI " + dni);
+            System.out.println("    Fecha de devolución estimada:    " + fechaEstimada);
+        } catch (LibroNoEncontradoException | UsuarioNoEncontradoException | LibroNoDisponibleExcepcion e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Ocurrió un error inesperado al realizar el préstamo: " + e.getMessage());
         }
     }
 }
