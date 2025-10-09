@@ -74,4 +74,23 @@ public class PrestamoService {
 
         return prestamos;
     }
+
+    public List<Prestamo> obtenerPrestamosVencidos() {
+        List<Prestamo> prestamos = prestamoRepository.findPrestamosVencidos();
+
+        if (prestamos.isEmpty()) {
+            throw new SinPrestamosVencidos("No hay prestamos vencidos actualmente");
+        }
+        return prestamos;
+    }
+
+    public Libro obtenerLibroMasPrestado() {
+        return prestamoRepository.findLibroMasPrestado()
+                .orElseThrow(() -> new SinPrestamosRegistradosException("No hay prestamos registrados en el momento"));
+    }
+
+    public Usuario obtenerUsuarioConMasPrestamos() {
+        Usuario usuario = prestamoRepository.findUsuariosConMasPrestamos()
+                .orElseThrow(() -> new SinPrestamosRegistradosException("No hay prestamos realizados en el momento"));
+    }
 }

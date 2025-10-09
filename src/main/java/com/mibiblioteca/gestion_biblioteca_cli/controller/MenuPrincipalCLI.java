@@ -3,14 +3,19 @@ package com.mibiblioteca.gestion_biblioteca_cli.controller;
 import com.mibiblioteca.gestion_biblioteca_cli.exceptions.*;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Autor;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Libro;
+import com.mibiblioteca.gestion_biblioteca_cli.model.Prestamo;
 import com.mibiblioteca.gestion_biblioteca_cli.model.Usuario;
 import com.mibiblioteca.gestion_biblioteca_cli.service.AutorService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.LibroService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.PrestamoService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.UsuarioService;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuPrincipalCLI {
@@ -43,10 +48,9 @@ public class MenuPrincipalCLI {
                 
                 1_ Registro y Gestión
                 2_ Préstamos
-                3_ Devoluciones
-                4_ Reportes y Estadísticas
+                3_ Reportes y Estadísticas
                 
-                5_ SALIR
+                4_ SALIR
                 """);
 
             System.out.print("-> ");
@@ -60,12 +64,9 @@ public class MenuPrincipalCLI {
                     prestamos();
                     break;
                 case "3":
-                    devoluciones();
-                    break;
-                case "4":
                     reportesYEstadisticas();
                     break;
-                case "5":
+                case "4":
                     salir = true;
                     break;
                 default:
@@ -311,4 +312,119 @@ public class MenuPrincipalCLI {
             System.out.println("❌ Ocurrió un error inesperado al realizar el préstamo: " + e.getMessage());
         }
     }
+
+    private void devolverPrestamo() {
+        System.out.println("\n--- DEVOLVER LIBRO PRESTADO ---");
+        try {
+            System.out.println("Ingrese el ISBN del libro prestado:");
+            System.out.print("-> ");
+            String isbn = sc.nextLine();
+
+            Prestamo prestamoActualizado = prestamoService.devolverPrestamo(isbn);
+
+            System.out.println("✅ Devolución hecha con éxito");
+            System.out.println("    Libro (ISBN):    " + isbn);
+            System.out.println("    Fecha de devolucion:    " + prestamoActualizado.getFechaDevolucionReal());
+        } catch (LibroNoEncontradoException | LibroYaDevueltoException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error al realizar la devolución: " + e.getMessage());
+        }
+    }
+
+    private void obtenerPrestamosActivos() {
+        System.out.println("\n--- OBTENER PRESTAMOS ACTIVOS ---");
+
+        try {
+            List<Prestamo> prestamos = prestamoService.obtenerPrestamosActivos();
+
+            for (Prestamo prestamo : prestamos) {
+                System.out.println("Libro: " + prestamo.getLibro() + "\nPrestado al usuario: " + prestamo.getUsuario() + "\nPrestado en la fecha: " + prestamo.getFechaPrestamo() + "\nFecha de devolución estimada: " + prestamo.getFechaDevolucionEstimada());
+            }
+        } catch (SinPrestamosActivosExcepcion e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void obtenerPrestamosEntreFechas() {
+        System.out.println("\n--- OBTENER PRESTAMOS ENTRE FECHAS ---");
+
+        try {
+            System.out.println("Ingrese la primer fecha límite (AAA-MM-DD):");
+            System.out.print("-> ");
+            String fechaInicioString = sc.nextLine().trim();
+
+            System.out.println("Ingrese la segunda fecha límite (AAAA-MM-DD):");
+            System.out.print("-> ");
+            String fechaFinString = sc.nextLine().trim();
+
+            LocalDate fechaInicio = LocalDate.parse(fechaInicioString);
+            LocalDate fechaFin = LocalDate.parse(fechaFinString);
+
+            List<Prestamo> prestamos = prestamoService.obtenerPrestamosEntreFechas(fechaInicio, fechaFin);
+
+            for (Prestamo prestamo : prestamos) {
+                System.out.println("Fecha de prestamo: " + prestamo.getFechaPrestamo() + "\nFecha de devolución: " + prestamo.getFechaDevolucionReal());
+            }
+        } catch (DateTimeParseException e) {
+            System.out.println("❌ Error al ingresar la fecha. Intente el formato adecuado (AAAA-MM-DD)");
+        } catch (PrestamosNoEncontradosExcepcion e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error al intentar devolver los prestamos");
+        }
+    }
+    //----------------------------------
+
+    //----------------------------------
+    // Maneja toda la sección de Reportes y Estadísticas
+    private void reportesYEstadisticas() {
+        System.out.println("\n--- REPORTES Y ESTADÍSTICAS ---");
+        while (!salir) {
+            System.out.println("""
+                    1. Mostrar libros más prestados
+                    2. Mostrar usuarios con más prestamos
+                    3. Prestamos vencidos
+                    
+                    4. Volver al menú principal
+                    """);
+            System.out.println("Elija su opción:");
+            System.out.print("-> ");
+            String eleccion = sc.nextLine().trim();
+
+            switch (eleccion) {
+                case "1":
+                    mostrarLibrosMasPrestados();
+                    break;
+                case "2":
+                    mostrarUsuariosConMasPrestamos();
+                    break;
+                case "3":
+                    mostrarPrestamosVencidos();
+                    break;;
+                case "4":
+                    return;
+                default:
+                    System.out.println("Opción no válida, vuelva a elegir!");
+                    break;
+            }
+        }
+    }
+
+    private void mostrarLibrosMasPrestados() {
+        try {
+            Libro libro = prestamoService.obtenerLibroMasPrestado();
+
+            System.out.println("✅ Libro con más prestamos:");
+            System.out.println("    Título:    " + libro.getTitulo());
+            System.out.println("    Autor:    " + libro.getAutor().getNombre() + " " + libro.getAutor().getApellido());
+            System.out.println("    ISBN:    " + libro.getIsbn());
+        } catch (LibroNoEncontradoException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error! No se pudo completar la búsqeda: " + e.getMessage());
+        }
+    }
+
+
 }
