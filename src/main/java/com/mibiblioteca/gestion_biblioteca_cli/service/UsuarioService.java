@@ -17,10 +17,11 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario registrarUsuario(Usuario nuevoUsuario) {
-        if (usuarioRepository.findByDni(nuevoUsuario.getDni()).isPresent()) {
+    public Usuario registrarUsuario(String nombre, String apellido, String dni) {
+        if (usuarioRepository.findByDni(dni).isPresent()) {
             throw new UsuarioYaRegistradoException("El usuario ya está registrado");
         }
+        Usuario nuevoUsuario = new Usuario(nombre, apellido, dni);
         return usuarioRepository.save(nuevoUsuario);
     }
 

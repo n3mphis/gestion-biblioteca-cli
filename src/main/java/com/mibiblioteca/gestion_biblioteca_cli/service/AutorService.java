@@ -15,12 +15,13 @@ public class AutorService {
         this.autorRepository = autorRepository;
     }
 
-    public Autor registrarAutor(Autor autor) {
-        if (autorRepository.findByNombreAndApellido(autor.getNombre(), autor.getApellido()).isPresent()) {
+    public Autor registrarAutor(String nombre, String apellido) {
+        if (autorRepository.findByNombreAndApellido(nombre, apellido).isPresent()) {
             throw new AutorYaRegistradoException("El autor ya está registrado");
         }
 
-        return autorRepository.save(autor);
+        Autor nuevoAutor = new Autor(nombre, apellido);
+        return autorRepository.save(nuevoAutor);
     }
 
     public Autor buscarPorNombreYApellido(String nombre, String apellido) {
