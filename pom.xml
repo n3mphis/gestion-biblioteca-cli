@@ -12,7 +12,7 @@
 	<artifactId>gestion-biblioteca-cli</artifactId>
 	<version>1.0.0</version>
 	<name>gestion-biblioteca-cli</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Aplicación de Consola (CLI) para la gestión completa de registros, préstamos y reportes de una biblioteca.</description>
 	<url/>
 	<licenses>
 		<license/>
