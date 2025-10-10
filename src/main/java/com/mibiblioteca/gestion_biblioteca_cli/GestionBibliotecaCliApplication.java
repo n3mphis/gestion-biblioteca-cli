@@ -13,11 +13,4 @@ public class GestionBibliotecaCliApplication {
 		SpringApplication.run(GestionBibliotecaCliApplication.class, args);
 	}
 
-    @Bean
-    public CommandLineRunner run(MenuPrincipalCLI cli) {
-        return args -> {
-            cli.iniciarMenu();
-        };
-    }
-
 }

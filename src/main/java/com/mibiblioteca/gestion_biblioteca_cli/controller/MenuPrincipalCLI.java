@@ -9,6 +9,7 @@ import com.mibiblioteca.gestion_biblioteca_cli.service.AutorService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.LibroService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.PrestamoService;
 import com.mibiblioteca.gestion_biblioteca_cli.service.UsuarioService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 
 @Controller
-public class MenuPrincipalCLI {
+public class MenuPrincipalCLI implements CommandLineRunner {
     private final AutorService autorService;
     private final LibroService libroService;
     private final PrestamoService prestamoService;
@@ -31,6 +32,11 @@ public class MenuPrincipalCLI {
         this.libroService = libroService;
         this.prestamoService = prestamoService;
         this.usuarioService = usuarioService;
+    }
+
+    @Override
+    public void run(String[] args) {
+        iniciarMenu();
     }
 
     public void iniciarMenu() {
