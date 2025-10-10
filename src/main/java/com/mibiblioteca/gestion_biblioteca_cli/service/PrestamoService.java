@@ -16,6 +16,7 @@ public class PrestamoService {
     private final PrestamoRepository prestamoRepository;
     private final UsuarioService usuarioService;
     private final LibroService libroService;
+    private Usuario usuario;
 
     public PrestamoService(PrestamoRepository prestamoRepository, UsuarioService usuarioService, LibroService libroService) {
         this.prestamoRepository = prestamoRepository;
@@ -41,7 +42,7 @@ public class PrestamoService {
 
     public Prestamo devolverPrestamo(String isbn) {
         // Buscar el prestamo por fecha de devolucion
-        Prestamo prestamo = prestamoRepository.findByLibroIsbnAndFechaDevolucionRealIsnull(isbn)
+        Prestamo prestamo = prestamoRepository.findByLibroIsbnAndFechaDevolucionRealIsNull(isbn)
                 .orElseThrow(() -> new LibroYaDevueltoException("El libro ya fue devuelto"));
 
         // Establecer cuando fue devuelto realmente
@@ -90,7 +91,7 @@ public class PrestamoService {
     }
 
     public Usuario obtenerUsuarioConMasPrestamos() {
-        Usuario usuario = prestamoRepository.findUsuariosConMasPrestamos()
+        return usuario = prestamoRepository.findUsuariosConMasPrestamos()
                 .orElseThrow(() -> new SinPrestamosRegistradosException("No hay prestamos realizados en el momento"));
     }
 }

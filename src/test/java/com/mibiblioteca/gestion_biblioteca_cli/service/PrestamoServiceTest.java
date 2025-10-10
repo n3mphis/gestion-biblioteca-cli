@@ -132,7 +132,7 @@ public class PrestamoServiceTest {
         Prestamo prestamoActivo = new Prestamo(libroPrestado, usuarioValido, fechaDevolucionEstimada);
 
         // 1. Simular la búsqueda: Cuando se busque el préstamo activo por ISBN, devolverlo.
-        when(prestamoRepository.findByLibroIsbnAndFechaDevolucionRealIsnull(libroPrestado.getIsbn()))
+        when(prestamoRepository.findByLibroIsbnAndFechaDevolucionRealIsNull(libroPrestado.getIsbn()))
                 .thenReturn(Optional.of(prestamoActivo));
 
         // 2. Simular el guardado: Devolver el objeto que Mockito recibió (el ya modificado)
@@ -167,7 +167,7 @@ public class PrestamoServiceTest {
         String isbnSinPrestamoActivo = "999-9999999999999";
 
         // 1. Simular la busqueda: El repositorio devuelve un Optional vacío (no hay prestamo activo)
-        when(prestamoRepository.findByLibroIsbnAndFechaDevolucionRealIsnull(isbnSinPrestamoActivo))
+        when(prestamoRepository.findByLibroIsbnAndFechaDevolucionRealIsNull(isbnSinPrestamoActivo))
                 .thenReturn(Optional.empty()); // <-- Simular el fallo de busqueda
 
         // ACT & ASSERT
@@ -185,6 +185,6 @@ public class PrestamoServiceTest {
         verify(prestamoRepository, never()).save(any(Prestamo.class));
 
         // 3. El metodo de busqueda DEBE haber sido llamado
-        verify(prestamoRepository, times(1)).findByLibroIsbnAndFechaDevolucionRealIsnull(isbnSinPrestamoActivo);
+        verify(prestamoRepository, times(1)).findByLibroIsbnAndFechaDevolucionRealIsNull(isbnSinPrestamoActivo);
     }
 }

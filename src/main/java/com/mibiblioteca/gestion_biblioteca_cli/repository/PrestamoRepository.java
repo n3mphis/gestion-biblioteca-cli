@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface PrestamoRepository extends JpaRepository<Prestamo, Long> {
 
-    Optional<Prestamo> findByLibroIsbnAndFechaDevolucionRealIsnull(String isbn);
+    Optional<Prestamo> findByLibroIsbnAndFechaDevolucionRealIsNull(String isbn);
 
     List<Prestamo> findByFechaDevolucionRealIsNull();
     List<Prestamo> findByFechaPrestamoBetween(LocalDate fechaInicio, LocalDate fechaFin);

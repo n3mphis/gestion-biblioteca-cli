@@ -3,7 +3,6 @@ package com.mibiblioteca.gestion_biblioteca_cli.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "libros")
@@ -18,16 +17,18 @@ public class Libro {
 
     @ManyToOne
     private Autor autor;
-    private String Isbn;
+
+    @Column(unique = true, nullable = false)
+    private String isbn;
     private int añoPublicacion;
 
     private boolean disponible;
 
-    public Libro(String titulo, Autor autor,int añoPublicacion, String Isbn) {
+    public Libro(String titulo, Autor autor,int añoPublicacion, String isbn) {
         this.titulo = titulo;
         this.autor = autor;
         this.añoPublicacion = añoPublicacion;
-        this.Isbn = Isbn;
+        this.isbn = isbn;
         this.disponible = true;
     }
 

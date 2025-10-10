@@ -25,4 +25,22 @@ public class Usuario {
         this.apellido = apellido;
         this.dni = dni;
     }
+
+    public String getDniFormateado() {
+        if (dni == null || dni.length() < 7 ||dni.length() > 8) {
+            return dni; // Devuelve el valor original si es invalido o nulo
+        }
+
+        // Uso stringbuilder para construir la cadena de forma eficiente
+        StringBuilder sb = new StringBuilder(dni);
+
+
+        // Se inserta 3 caracteres antes del final
+        sb.insert(sb.length() - 3, '.');
+
+        // Se inserta 6 o 5 caracteres antes del final (3 + el punto ya insertado)
+        sb.insert(sb.length() - 7, '.');
+
+        return sb.toString();
+    }
 }
