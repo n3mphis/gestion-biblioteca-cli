@@ -30,11 +30,14 @@ Java 17, Spring Boot 3.5.6, H2 DataBase, Hibernate, Lombok
 El proyecto sigue una arquitectura en capas (Controller, Service y Repository) promoviendo la separación de responsabilidades y la reutilización de código
 ## Ejecución
 
-1. **Verificar Versión de Java:**
+1. **Verificar Versión de Java y Maven:**
    Asegurate de que tu terminal está usando la versión correcta:
    ```bash
    java -version
    # La salida debe mostrar 'openjdk version "17.x.x"' o 'java version 17.x.x"'
+
+   mvn -version
+   # La salida debe mostrar Apache Maven 3.8.7 o similar
    ```
 2. **Compilar y Empaquetar:**
    ```bash
