@@ -24,7 +24,7 @@ Java 17, Spring Boot 3.5.6, H2 DataBase, Hibernate, Lombok
 
 ## Estado del Proyecto
 
-🚧 En desarrollo 
+🏁 Completado, pero voy arreglando y cambiando pequeñas cosas
 ## Arquitectura y Estructura
 
 El proyecto sigue una arquitectura en capas (Controller, Service y Repository) promoviendo la separación de responsabilidades y la reutilización de código
