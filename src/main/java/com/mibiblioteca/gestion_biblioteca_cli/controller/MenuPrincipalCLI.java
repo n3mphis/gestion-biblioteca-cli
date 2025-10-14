@@ -151,11 +151,11 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             System.out.println("\n✅ Usuario " + nombre + " "+ apellido + " registrado con éxito!\n");
 //            registroYGestion();
         } catch (UsuarioYaRegistradoException e) {
-            System.out.println("❌ Error de registro: " + e.getMessage());
+            System.out.println("\n❌ Error de registro: " + e.getMessage());
         } catch (FormatoDniInvalidoException e) {
-            System.out.println("❌ Error de formato: " + e.getMessage());
+            System.out.println("\n❌ Error de formato: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("❌ Error: No se pudo completar el registro: " + e.getMessage());
+            System.out.println("\n❌ Error: No se pudo completar el registro: " + e.getMessage() + "\n");
         }
     }
 
@@ -172,15 +172,19 @@ public class MenuPrincipalCLI implements CommandLineRunner {
 
             List<Usuario> usuariosNombreYApellido = usuarioService.buscarPorNombreYApellido(nombreUsuario, apellidoUsuario);
 
+            System.out.println("✅ Usuario encontrado: ");
+
             for (Usuario usuario : usuariosNombreYApellido) {
                 System.out.println("\n    Nombre:    " + usuario.getNombre());
                 System.out.println("    Apellido:    " + usuario.getApellido());
                 System.out.println("    DNI:    " + usuario.getDniFormateado() + "\n");
             }
+
+
         } catch (UsuarioNoEncontradoException e) {
-            System.out.println("❌ Error! " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
 
     }
@@ -199,9 +203,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             autorService.registrarAutor(nombre, apellido);
             System.out.println("\n✅ Autor: " + nombre + " " + apellido + " registrado con exito!\n");
         } catch (AutorYaRegistradoException e) {
-            System.out.println("❌ Error! " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -237,15 +241,15 @@ public class MenuPrincipalCLI implements CommandLineRunner {
 
             System.out.println("\n✅ Éxito! El libro: " + libro.getTitulo() + " fue registrado exitosamente!\n");
         } catch (InputMismatchException e) {
-            System.out.println("❌ Error: Por favor, ingrese un numero en año de publicación. " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: Por favor, ingrese un numero en año de publicación. " + e.getMessage() + "\n");
             sc.nextLine(); // limpiar buffer para que no haya un loop infinito
         } catch (AutorNoEncontradoException e) {
-            System.out.println("❌ Error: No se encontró el autor. " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: No se encontró el autor. " + e.getMessage() + "\n");
         }
         catch (LibroYaRegistradoException e) {
-            System.out.println("❌ Error!" + e.getMessage() + "\n");
+            System.out.println("\n❌ Error!" + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -266,9 +270,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             System.out.println("    DNI:    " + usuarioEncontrado.getDniFormateado() + "\n");
 
         } catch (UsuarioNoEncontradoException e) {
-            System.out.println("❌" + e.getMessage() + "\n");
+            System.out.println("\n❌ Error:" + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error! " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         }
     }
 
@@ -290,9 +294,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             String estado = libroEncontrado.isDisponible() ? "\uD83D\uDFE2 DISPONIBLE" : "\uD83D\uDD34 PRESTADO";
             System.out.println("    Estado:    " + estado + "\n");
         } catch (LibroNoEncontradoException e) {
-            System.out.println("❌" + e.getMessage() + "\n");
+            System.out.println("\n❌ Error:" + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() +"\n");
+            System.out.println("\n❌ Error: " + e.getMessage() +"\n");
         }
     }
     //---------------------------------
@@ -362,9 +366,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             System.out.println("\n    Libro (ISBN):    " + isbn + "\n    Título:    " + libro.getTitulo()  + "\n    Prestado al usuario con DNI:    " + dni);
             System.out.println("    Fecha de devolución estimada:    " + fechaEstimada + "\n");
         } catch (LibroNoEncontradoException | UsuarioNoEncontradoException | LibroNoDisponibleExcepcion e) {
-            System.out.println(e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Ocurrió un error inesperado al realizar el préstamo: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! Ocurrió un error inesperado al realizar el préstamo: " + e.getMessage() + "\n");
         }
     }
 
@@ -383,9 +387,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             System.out.println("    Título:    " + libroDevuelto.getTitulo());
             System.out.println("    Fecha de devolucion:    " + prestamoActualizado.getFechaDevolucionReal() + "\n");
         } catch (LibroNoEncontradoException | LibroYaDevueltoException e) {
-            System.out.println(e.getMessage() + "\n");
+            System.out.println("\n❌ " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error al realizar la devolución: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error al realizar la devolución: " + e.getMessage() + "\n");
         }
     }
 
@@ -429,9 +433,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
         } catch (DateTimeParseException e) {
             System.out.println("❌ Error al ingresar la fecha. Intente el formato adecuado (AAAA-MM-DD)\n");
         } catch (PrestamosNoEncontradosExcepcion e) {
-            System.out.println("❌\n Error! " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
     }
     //----------------------------------
@@ -485,9 +489,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             System.out.println("    Autor:    " + libro.getAutor().getNombre() + " " + libro.getAutor().getApellido());
             System.out.println("    ISBN:    " + libro.getIsbn() + "\n");
         } catch (LibroNoEncontradoException e) {
-            System.out.println("❌ Error! " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -499,9 +503,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
             System.out.println("    Nombre de usuario:    " + usuario.getNombre() + " " + usuario.getApellido());
             System.out.println("    DNI:    " + usuario.getDni() + "\n");
         } catch (SinPrestamosActivosExcepcion e) {
-            System.out.println("❌ Error!" +  e.getMessage() + "\n");
+            System.out.println("\n❌ Error!" +  e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -519,9 +523,9 @@ public class MenuPrincipalCLI implements CommandLineRunner {
                 System.out.println("Fecha actual:    " + LocalDate.now());
             }
         } catch (SinPrestamosActivosExcepcion e) {
-            System.out.println("❌ Error! " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error! " + e.getMessage() + "\n");
         } catch (Exception e) {
-            System.out.println("❌ Error: " + e.getMessage() + "\n");
+            System.out.println("\n❌ Error: " + e.getMessage() + "\n");
         }
     }
 }
